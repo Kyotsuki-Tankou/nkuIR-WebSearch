@@ -57,13 +57,23 @@ def procPage(url):
     except:
         print(f"error in {url}")
         
-def do_page(url_list):
+def do_page(url_list,max_worker=10):
     cnt=0
     url_list=list(set(url_list))
-    for url in url_list:
-        cnt+=1
-        print(f"{cnt}/{len(url_list)} : Processing Page: {url}")
-        procPage(url)
+    # for url in url_list:
+    #     cnt+=1
+    #     print(f"{cnt}/{len(url_list)} : Processing Page: {url}")
+    #     procPage(url)
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        future2url={executor.submit(procPage,url): url for url in url_list}
+        for future in as_completed(future2url):
+            url=future2url[future]
+            try:
+                future.result()
+                cnt+=1
+                print(f'{cnt}/{len(url_list)} completed.')
+            except Exception as exc:
+                print(f"{url} generated an exception: {exc}")
         
         
 if __name__=='__main__':
