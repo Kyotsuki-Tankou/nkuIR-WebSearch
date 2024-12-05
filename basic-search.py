@@ -37,7 +37,7 @@ index_body = {
     }
 }
 
-def gen_query(query_word_term,query_word_phrase,fields):#生成基础查询
+def gen_query(query_word_term,query_word_phrase,query_word_regex,fields):#生成基础查询
     #精准匹配，也就是"南开大学"-X->"南开是大学"
     must_clauses=[]
     for query_word in query_word_term:
@@ -64,7 +64,19 @@ def gen_query(query_word_term,query_word_phrase,fields):#生成基础查询
             }
         }
         )
-        
+    #正则匹配
+    for query_word in query_word_regex:
+        must_clauses.append(
+            {
+                "bool": {
+                    "should": [
+                        {"regexp": {field: query_word}} for field in fields
+                    ],
+                    "minimum_should_match": 1
+                }
+            }
+        )
+    
     query={
         "query":{
             "bool":{
@@ -75,10 +87,11 @@ def gen_query(query_word_term,query_word_phrase,fields):#生成基础查询
     return query
     
 #执行搜索
-def conduct_basic_query(query_word_term=[],query_word_phrase=[],
+def conduct_basic_query(query_word_term=[],query_word_phrase=[],query_word_regex=[],
                         es=es,index_name=index_name,fields=['title','anchor','content'],
                         query_size=None):
-    query=gen_query(query_word_term=query_word_term,query_word_phrase=query_word_phrase,fields=fields)
+    query=gen_query(query_word_term=query_word_term,query_word_phrase=query_word_phrase,
+                    query_word_regex=query_word_regex,fields=fields)
 
     response=es.search(index=index_name,body=query,scroll='2m',size=2000)#使用滚动方式进行获取
     
@@ -133,11 +146,19 @@ if __name__=="__main__":
         if query_word=='^':
             query_word_phrase=[]
         
+        print("Input the RegEX match (split with '^'):")
+        query_word=input()
+        query_word_regex=list(set(query_word.split('^')))
+        query_word_regex=[s for s in query_word_regex if s.strip()]
+        if query_word=='^':
+            query_word_regex=[]
+            
         # print(query_word_term)
         # print(query_word_phrase)
         # print(len(query_word_term),len(query_word_phrase))
 
-        query_num=conduct_basic_query(query_word_term=query_word_term,query_word_phrase=query_word_phrase,query_size=131072)
+        query_num=conduct_basic_query(query_word_term=query_word_term,query_word_phrase=query_word_phrase,
+                                      query_word_regex=query_word_regex,query_size=131072)
         
         print(f'Find {query_num} results.')
         print("QUIT to quit (not case sensitive).")
