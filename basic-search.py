@@ -37,32 +37,56 @@ index_body = {
     }
 }
 
-#执行搜索
-def conduct_query(query_word,es=es,index_name=index_name,query_size=None):
-    query={}
-    if query_size is not None:
-        query={
-            "query":{
-                "multi_match":{
-                    "query":query_word,
-                    "fields":['title','anchor_text','context']
-                }
-            },
-            'size':query_size
+def gen_query(query_word_term,query_word_phrase,fields):#生成基础查询
+    #精准匹配，也就是"南开大学"-X->"南开是大学"
+    must_clauses=[]
+    for query_word in query_word_term:
+        must_clauses.append(
+            {
+            "bool": {
+                "should": [
+                    {"match_phrase": {field: query_word}} for field in fields
+                ],
+                "minimum_should_match": 1
+            }
         }
-    else:
-        query={
-            "query":{
-                "multi_match":{
-                    "query":query_word,
-                    "fields":['title','anchor_text','context']
-                }
-            },
+        )
+    #模糊匹配，也就是"南开大学"->"南开是大学"且"南开大学"->"南"
+    for query_word in query_word_phrase:
+        # should_clauses.append(
+        must_clauses.append(
+        {
+            "bool": {
+                "should": [
+                    {"match": {field: query_word}} for field in fields
+                ],
+                "minimum_should_match": 1
+            }
         }
+        )
+        
+    query={
+        "query":{
+            "bool":{
+                "must":must_clauses,
+            }
+        }
+    }
+    return query
     
-    respond=es.search(index=index_name,body=query)
+#执行搜索
+def conduct_basic_query(query_word_term=[],query_word_phrase=[],
+                        es=es,index_name=index_name,fields=['title','anchor','content'],
+                        query_size=None):
+    query=gen_query(query_word_term=query_word_term,query_word_phrase=query_word_phrase,fields=fields)
+
+    response=es.search(index=index_name,body=query,scroll='2m',size=2000)#使用滚动方式进行获取
+    
+    scroll_id=response['_scroll_id']
+    results=response['hits']['hits']
+    query_len=len(results)
     query_cnt=0
-    for hit in respond['hits']['hits']:
+    for hit in results:
         query_cnt+=1
         
         title=hit['_source']['title']
@@ -80,15 +104,43 @@ def conduct_query(query_word,es=es,index_name=index_name,query_size=None):
         
         if query_cnt>10:
             break
+    while len(results):
+        if query_len>=query_size:
+            break
+        response=es.scroll(scroll_id=scroll_id,scroll='2m')
+        scroll_id=response['_scroll_id']
+        results=response['hits']['hits']
+        query_len+=len(results)
         
-    return len(respond['hits']['hits'])
-        
+    return query_len
+
 if __name__=="__main__":
     while True:
-        print("input your query, QUIT to quit.")
+        print("Input the precise word match (split with '^' without quote):")
+        query_word_term=[]
+        query_word_phrase=[]
+        
         query_word=input()
-        if query_word=="QUIT":        
+        query_word_term=list(set(query_word.split('^')))
+        query_word_term=[s for s in query_word_term if s.strip()]
+        if query_word=='^':
+            query_word_term=[]
+            
+        print("Input the ambiguity word match (split with '^' without quote with not necessarility):")
+        query_word=input()
+        query_word_phrase=list(set(query_word.split('^')))
+        query_word_phrase=[s for s in query_word_phrase if s.strip()]
+        if query_word=='^':
+            query_word_phrase=[]
+        
+        # print(query_word_term)
+        # print(query_word_phrase)
+        # print(len(query_word_term),len(query_word_phrase))
+
+        query_num=conduct_basic_query(query_word_term=query_word_term,query_word_phrase=query_word_phrase,query_size=131072)
+        
+        print(f'Find {query_num} results.')
+        print("QUIT to quit (not case sensitive).")
+        quit_word=input()
+        if quit_word.lower()=="quit":        
             break
-        else:
-            query_num=conduct_query(query_word=query_word,query_size=10000)
-            print(f'Find {query_num} results.')
