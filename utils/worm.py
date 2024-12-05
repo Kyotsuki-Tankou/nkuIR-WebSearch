@@ -1,10 +1,3 @@
-# import os
-# import asyncio
-# import aiofiles
-# import pandas as pd
-# import httpx
-# from parsel import Selector
-
 import requests
 import os
 import pandas as pd
@@ -64,7 +57,7 @@ def do_page(url_list,max_worker=10):
     #     cnt+=1
     #     print(f"{cnt}/{len(url_list)} : Processing Page: {url}")
     #     procPage(url)
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=max_worker) as executor:
         future2url={executor.submit(procPage,url): url for url in url_list}
         for future in as_completed(future2url):
             url=future2url[future]
