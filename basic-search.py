@@ -119,7 +119,7 @@ def gen_query(query_word_term,query_word_phrase,fields,frequent_token=['程明�
 #执行搜索
 def conduct_basic_query(query_word_term=[],query_word_phrase=[],
                         es=es,index_name=index_name,fields=['title','anchor','content'],
-                        query_size=None):
+                        query_size=5):
     query=gen_query(query_word_term=query_word_term,query_word_phrase=query_word_phrase,
                     fields=fields)
 
@@ -138,13 +138,12 @@ def conduct_basic_query(query_word_term=[],query_word_phrase=[],
         url=hit['_source']['url']
         
         #去除html标签
-        soup=BeautifulSoup(content,'html')
+        soup=BeautifulSoup(content,features="lxml")
         text_content=soup.get_text()
         cleaned_content=' '.join(text_content.split()) #去除所有空字符
         print(f"Title:{title}")
         print(f'url: {url}')
         print(f'content: {cleaned_content[:250]}...')
-        print("-"*50)
         
         token_counter=Counter()
         highlight_pattern=re.compile(r'<em>(.*?)</em>')#统计各个token的出现次数
@@ -157,17 +156,129 @@ def conduct_basic_query(query_word_term=[],query_word_phrase=[],
         for token,count in token_counter.most_common():
             print(f"{token}:{count}")
             
-        if query_cnt>10:
+        print("-"*50)
+        if query_cnt>query_size:
             break
     while len(results):
-        if query_len>=query_size:
-            break
+        # if query_len>=query_size:
+        #     break
         response=es.scroll(scroll_id=scroll_id,scroll='2m')
         scroll_id=response['_scroll_id']
         results=response['hits']['hits']
         query_len+=len(results)
         
     return query_len
+
+ 
+#执行搜索
+def conduct_regex_query(query_word_term=[],query_word_phrase=[],query_word_regex=[],
+                        es=es,index_name=index_name,fields=['title','anchor','content'],
+                        query_size=5):    
+    # print(query_word_phrase+query_word_regex)
+    
+    query=gen_query(query_word_term=query_word_term,query_word_phrase=query_word_phrase+query_word_regex,
+                    fields=fields)
+
+    response=es.search(index=index_name,body=query,scroll='2m',size=2000)#使用滚动方式进行获取
+    
+    scroll_id=response['_scroll_id']
+    results=response['hits']['hits']
+    query_len=len(results)
+    query_cnt=0
+    regex_patterns=[re.compile(regex_word) for regex_word in query_word_regex]
+    print("regex:",regex_patterns)
+    for hit in results:
+        title=hit['_source']['title']
+        content=hit['_source']['content']
+        url=hit['_source']['url']
+        
+        #去除html标签
+        soup=BeautifulSoup(content,features="lxml")
+        text_content=soup.get_text()
+        
+        #检查title， url和text_content中是否有匹配regex_patterns的内容，对于每个正则语句，三者有一个满足即可
+        # match_miss=False
+        # for pattern in regex_patterns:
+        #     if not pattern.search(title) and not pattern.search(url) and not pattern.search(text_content):
+        #         match_miss=True
+        #         break
+        match_found=any(pattern.search(title) or pattern.search(url) or pattern.search(text_content) for pattern in regex_patterns)
+        if not match_found:
+            continue
+        query_cnt+=1
+        if query_cnt>query_size:
+            continue
+        
+        cleaned_content=' '.join(text_content.split()) #去除所有空字符
+        print(f"Title:{title}")
+        print(f'url: {url}')
+        print(f'content: {cleaned_content[:250]}...')
+        
+        token_counter=Counter()
+        highlight_pattern=re.compile(r'<em>(.*?)</em>')#统计各个token的出现次数
+        highlights=hit.get('highlight',{})
+        for field,highlight in highlights.items():
+            for fragment in highlight:
+                tokens=highlight_pattern.findall(fragment)
+                token_counter.update(tokens)
+        print("Token count:")
+        for token,count in token_counter.most_common():
+            print(f"{token}:{count}")
+        
+        print("-"*50)
+        
+    while len(results):
+        # if query_len>=query_size:
+        #     break
+        # print(f"length of results is:{len(results)}")
+        response=es.scroll(scroll_id=scroll_id,scroll='2m')
+        scroll_id=response['_scroll_id']
+        results=response['hits']['hits']
+        query_len+=len(results)
+        
+        for hit in results:
+            title=hit['_source']['title']
+            content=hit['_source']['content']
+            url=hit['_source']['url']
+            
+            #去除html标签
+            soup=BeautifulSoup(content,features="lxml")
+            text_content=soup.get_text()
+            
+            #检查title， url和text_content中是否有匹配regex_patterns的内容，对于每个正则语句，三者有一个满足即可
+            # match_found=False
+            # for pattern in regex_patterns:
+            #     if not pattern.search(title) and not pattern.search(url) and not pattern.search(text_content):
+            #         match_found=True
+            #         break
+                
+            # if not match_found:
+            #     continue
+            match_found=any(pattern.search(title) or pattern.search(url) or pattern.search(text_content) for pattern in regex_patterns)
+            if not match_found:
+                continue
+            query_cnt+=1
+            if query_cnt>query_size:
+                continue
+            
+            cleaned_content=' '.join(text_content.split()) #去除所有空字符
+            print(f"Title:{title}")
+            print(f'url: {url}')
+            print(f'content: {cleaned_content[:250]}...')
+            print("-"*50)
+            
+            token_counter=Counter()
+            highlight_pattern=re.compile(r'<em>(.*?)</em>')#统计各个token的出现次数
+            highlights=hit.get('highlight',{})
+            for field,highlight in highlights.items():
+                for fragment in highlight:
+                    tokens=highlight_pattern.findall(fragment)
+                    token_counter.update(tokens)
+            print("Token count:")
+            for token,count in token_counter.most_common():
+                print(f"{token}:{count}")
+                
+    return query_cnt
     
 if __name__=="__main__":
     while True:
@@ -198,10 +309,13 @@ if __name__=="__main__":
         # print(query_word_term)
         # print(query_word_phrase)
         # print(len(query_word_term),len(query_word_phrase))
-
-        query_num=conduct_basic_query(query_word_term=query_word_term,query_word_phrase=query_word_phrase,
-                                      query_size=131072)
-        
+        print(query_word_regex)
+        if len(query_word_regex)==0:
+            query_num=conduct_basic_query(query_word_term=query_word_term,query_word_phrase=query_word_phrase,
+                                      query_size=5)
+        else:
+            query_num=conduct_regex_query(query_word_term=query_word_term,query_word_phrase=query_word_phrase,
+                                      query_word_regex=query_word_regex,query_size=5)  
         print(f'Find {query_num} results.')
         print("QUIT to quit (not case sensitive).")
         quit_word=input()
