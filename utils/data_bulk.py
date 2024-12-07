@@ -16,9 +16,9 @@ es = Elasticsearch(
 
 
 # # 创建索引和映射
-index_name='html_index'
-index_body={
-    "settings":{
+index_name = 'html_index'
+index_body = {
+    "settings": {
         "analysis": {
             "analyzer": {
                 "ik_analyzer": {
@@ -29,12 +29,13 @@ index_body={
             }
         }
     },
-    "mappings":{
+    "mappings": {
         "properties": {
             "title": {"type": "text", "analyzer": "ik_analyzer"},
             "url": {"type": "keyword"},
             "anchor_text": {"type": "text", "analyzer": "ik_analyzer"},
-            "content": {"type": "text", "analyzer": "ik_analyzer"}
+            "content": {"type": "text", "analyzer": "ik_analyzer"},
+            "pagerank": {"type": "float"}
         }
     }
 }
@@ -54,6 +55,9 @@ cnt=0
 batch_size=1000
 actions=[]
 
+#pagerank
+graph=nx.DiGraph()
+
 for filename in os.listdir('pages'):
     if filename.endswith('.html'):
         title = os.path.splitext(filename)[0]
@@ -64,6 +68,7 @@ for filename in os.listdir('pages'):
                 soup=BeautifulSoup(file,'html.parser')
                 content=soup.get_text()
                 anchor_texts=[a.get_text() for a in soup.find_all('a')]
+                links=[a.get('href') for a in soup.find_all('a') if a.get('href')]
 
                 action={
                     "_index":index_name,
@@ -79,7 +84,23 @@ for filename in os.listdir('pages'):
                     print(f"cnt: {cnt}")
                     helpers.bulk(es,actions)
                     actions=[]
+                
+                graph.add_node(url)
+                for link in links:
+                    if link in title2url.values():
+                        graph.add_edge(url,link)
 
+#pagerank，为了防止pagerank过分影响结果，线性映射到[1,2]区间内
+pagerank=nx.pagerank(graph)
+min_pr=min(pagerank.values())
+max_pr=max(pagerank.values())
+mapped_pagerank={url:1+(pr-min_pr)/(max_pr-min_pr) for url,pr in pagerank.items()}
+
+for action in actions:
+    url=action["_source"]["url"]
+    if url in mapped_pagerank:
+        action['_source']['pagerank']=mapped_pagerank[url]
+        
 if __name__=="__main__":
     # 批量索引数据到Elasticsearch
     if actions:

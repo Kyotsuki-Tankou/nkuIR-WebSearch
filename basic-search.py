@@ -4,7 +4,9 @@ import os
 import networkx as nx
 from sklearn.feature_extraction.text import TfidfVectorizer
 import numpy as np
+from collections import Counter
 import jieba
+import re
 import csv
 
 #初始化es客户端
@@ -37,7 +39,7 @@ index_body = {
     }
 }
 
-def gen_query(query_word_term,query_word_phrase,query_word_regex,fields):#生成基础查询
+def gen_query(query_word_term,query_word_phrase,fields,frequent_token=['程明明','青年','学者','华为']):#生成基础查询
     #精准匹配，也就是"南开大学"-X->"南开是大学"
     must_clauses=[]
     for query_word in query_word_term:
@@ -52,9 +54,9 @@ def gen_query(query_word_term,query_word_phrase,query_word_regex,fields):#生成
         }
         )
     #模糊匹配，也就是"南开大学"->"南开是大学"且"南开大学"->"南"
+    should_clauses=[]
     for query_word in query_word_phrase:
-        # should_clauses.append(
-        must_clauses.append(
+        should_clauses.append(
         {
             "bool": {
                 "should": [
@@ -64,34 +66,62 @@ def gen_query(query_word_term,query_word_phrase,query_word_regex,fields):#生成
             }
         }
         )
-    #正则匹配
-    for query_word in query_word_regex:
-        must_clauses.append(
-            {
-                "bool": {
-                    "should": [
-                        {"regexp": {field: query_word}} for field in fields
-                    ],
-                    "minimum_should_match": 1
-                }
-            }
-        )
     
     query={
-        "query":{
-            "bool":{
-                "must":must_clauses,
+        "query": {
+            "function_score": { #进行function_score查询
+                "query": {#查询主体
+                    "bool": {
+                        "must": must_clauses,
+                        "should": should_clauses
+                    }
+                },
+                "functions": [
+                    {
+                        "field_value_factor": {
+                            "field": "pagerank",
+                            "factor": 1.0,
+                            "modifier": "none",
+                            "missing": 1.0
+                        }
+                    },
+                    {
+                        "script_score": {
+                            "script": {#个性化加权
+                                "source": """
+                                    double boost = 0;
+                                    for (token in params.frequent_token) {
+                                        if (doc.containsKey(token)) {
+                                            boost += 0.01;
+                                        }
+                                    }
+                                    return boost;
+                                """,
+                                "params": {
+                                    "frequent_token": frequent_token
+                                }
+                            }
+                        }
+                    }
+                ],
+                "boost_mode": "sum",
+                "max_boost": 0.1  # 最多提高10个token的权重
+            }
+        },
+        "highlight":{
+            "fields":{
+                field:{} for field in fields
             }
         }
     }
     return query
     
 #执行搜索
-def conduct_basic_query(query_word_term=[],query_word_phrase=[],query_word_regex=[],
+def conduct_basic_query(query_word_term=[],query_word_phrase=[],
                         es=es,index_name=index_name,fields=['title','anchor','content'],
                         query_size=None):
     query=gen_query(query_word_term=query_word_term,query_word_phrase=query_word_phrase,
-                    query_word_regex=query_word_regex,fields=fields)
+                    fields=fields)
 
     response=es.search(index=index_name,body=query,scroll='2m',size=2000)#使用滚动方式进行获取
     
@@ -99,6 +129,7 @@ def conduct_basic_query(query_word_term=[],query_word_phrase=[],query_word_regex
     results=response['hits']['hits']
     query_len=len(results)
     query_cnt=0
+    
     for hit in results:
         query_cnt+=1
         
@@ -115,6 +146,17 @@ def conduct_basic_query(query_word_term=[],query_word_phrase=[],query_word_regex
         print(f'content: {cleaned_content[:250]}...')
         print("-"*50)
         
+        token_counter=Counter()
+        highlight_pattern=re.compile(r'<em>(.*?)</em>')#统计各个token的出现次数
+        highlights=hit.get('highlight',{})
+        for field,highlight in highlights.items():
+            for fragment in highlight:
+                tokens=highlight_pattern.findall(fragment)
+                token_counter.update(tokens)
+        print("Token count:")
+        for token,count in token_counter.most_common():
+            print(f"{token}:{count}")
+            
         if query_cnt>10:
             break
     while len(results):
@@ -126,7 +168,7 @@ def conduct_basic_query(query_word_term=[],query_word_phrase=[],query_word_regex
         query_len+=len(results)
         
     return query_len
-
+    
 if __name__=="__main__":
     while True:
         print("Input the precise word match (split with '^' without quote):")
@@ -158,7 +200,7 @@ if __name__=="__main__":
         # print(len(query_word_term),len(query_word_phrase))
 
         query_num=conduct_basic_query(query_word_term=query_word_term,query_word_phrase=query_word_phrase,
-                                      query_word_regex=query_word_regex,query_size=131072)
+                                      query_size=131072)
         
         print(f'Find {query_num} results.')
         print("QUIT to quit (not case sensitive).")

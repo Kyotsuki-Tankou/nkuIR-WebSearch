@@ -22,4 +22,4 @@ def remove_all():
 
 if __name__=="__main__":
     get_count()
-    remove_all()
+    # remove_all()
