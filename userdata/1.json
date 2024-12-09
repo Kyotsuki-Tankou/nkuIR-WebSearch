@@ -3,28 +3,35 @@
     "password": "1",
     "history": [
         {
-            "exact": "\u7a0b\u660e\u660e",
+            "exact": "\u5357\u529e\u53d1",
             "fuzzy": "",
             "regex": "",
             "domain": "",
-            "size": 0
+            "size": 20
+        },
+        {
+            "exact": "\u5357\u529e\u53d1^2024",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
         },
         {
             "exact": "\u7a0b\u660e\u660e",
             "fuzzy": "",
             "regex": "",
             "domain": "",
-            "size": 0
+            "size": 20
         },
         {
-            "exact": "\u7a0b\u660e\u660e",
+            "exact": "\u5357\u529e\u53d1",
             "fuzzy": "",
             "regex": "",
             "domain": "",
-            "size": 0
+            "size": 20
         },
         {
-            "exact": "\u7a0b\u660e\u660e",
+            "exact": "\u5357\u529e\u53d1^2024",
             "fuzzy": "",
             "regex": "",
             "domain": "",
@@ -45,7 +52,14 @@
             "size": 20
         },
         {
-            "exact": "\u7a0b\u660e\u660e",
+            "exact": "\u5357\u529e\u53d1",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "\u5357\u529e\u53d1^2023",
             "fuzzy": "",
             "regex": "",
             "domain": "",
@@ -53,6 +67,14 @@
         }
     ],
     "freq_word": [
-        "\u7a0b\u660e\u660e"
+        "\u534e\u4e3a",
+        "\u5b66\u8005",
+        "\u9752\u5e74",
+        "\u7a0b",
+        "\u8ba1\u7b97\u673a\u5b66\u9662",
+        "2024",
+        "\u7a0b\u660e\u660e",
+        "\u5357\u529e\u53d1",
+        "2023"
     ]
 }

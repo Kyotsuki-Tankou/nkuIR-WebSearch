@@ -2,7 +2,7 @@ import os
 import json
 import logging
 from elasticsearch import Elasticsearch
-from flask import Flask,request,jsonify
+from flask import Flask,request,jsonify,send_from_directory
 from flask_cors import CORS
 
 from account import read_userjson,log_in,sign_up
@@ -168,5 +168,25 @@ def dosearch():
     # except:
     #     return jsonify({'success': False,"message":"发生错误"}),400
     
+@app.route('/get_user_info', methods=['POST','OPTIONS'])
+def get_info():
+    global userdata
+    global have_login
+    if have_login==False:
+        return jsonify({"success": False, "message": "请先登陆"}), 400
+    if request.method=='OPTIONS':
+        response=app.make_default_options_response()
+        response.headers['Access-Control-Allow-Methods']='POST'
+        response.headers['Access-Control-Allow-Headers']='Content-Type'
+        response.headers['Access-Control-Allow-Origin']='*'
+        return response
+    return jsonify({'success':True,'userdata':userdata}),200
+
+# 配置静态文件服务
+# @app.route('/static/<path:filename>')
+# def serve_static(filename):
+#     root_dir = './snapshot'
+#     return send_from_directory(root_dir, filename)
+
 if __name__ == '__main__':
     app.run(debug=True)
