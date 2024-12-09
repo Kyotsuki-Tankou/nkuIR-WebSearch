@@ -17,7 +17,6 @@ def conduct_query(
     query_word_regex=[],
     query_domain=None,
     frequent_token=[],
-    
     es=None,
     index_name=index_name,
     fields=['title','anchor','content','url'],
@@ -159,6 +158,10 @@ if __name__=="__main__":
     
     query_cnt,query_list,result_list=conduct_query(query_word_term=query_word_term,
     query_word_phrase=query_word_phrase,query_word_regex=query_word_regex,query_domain=query_domain,frequent_token=['华为'],
+    es=es,index_name=index_name,fields=['title','anchor','content','url'],query_size=5)
+    
+    recommend_cnt,recommend_list,recommend_res=conduct_query(query_word_term=query_word_term,
+    query_word_phrase=query_word_phrase+query_word_term,query_word_regex=query_word_regex,query_domain=query_domain,frequent_token=['华为'],
     es=es,index_name=index_name,fields=['title','anchor','content','url'],query_size=5)
     
     print(query_cnt)
