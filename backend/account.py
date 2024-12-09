@@ -26,6 +26,7 @@ def sign_up(account,passwd):
         return 2
     try:
         userdata=dict()
+        userdata["account"]=account
         userdata["password"]=passwd
         userdata["history"]=[]
         userdata["freq_word"]=[]

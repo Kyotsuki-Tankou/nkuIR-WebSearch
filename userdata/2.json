@@ -1,5 +1,28 @@
 {
+    "account": "2",
     "password": "2",
-    "history": [],
+    "history": [
+        {
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 0
+        },
+        {
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 0
+        },
+        {
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 0
+        }
+    ],
     "freq_word": []
 }

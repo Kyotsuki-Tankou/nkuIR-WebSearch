@@ -26,7 +26,9 @@ const Search = () => {
         const data=await response.json();
         if(data.success)
         {
-            /*显示搜索结果，结果包括：
+           setResult(data);
+           console.log(data)
+                       /*显示搜索结果，结果包括：
             搜索主体：
             每个搜索的主体结果包括
                 标题（带超链接）->res_list[i].title, res_list[i].url
@@ -37,7 +39,6 @@ const Search = () => {
             右下推荐栏（每行一个）：
                 标题（带超链接）->rec2_list[i].title, rec2_list[i].url
             */
-           setResult(data);
         }
         else
         {

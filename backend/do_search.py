@@ -27,7 +27,7 @@ def conduct_query(
     query=gen_query(query_word_term=query_word_term,query_word_phrase=query_word_phrase+query_word_regex,
                     fields=fields,frequent_token=frequent_token)
 
-    response=es.search(index=index_name,body=query,scroll='5m',size=10000)#使用滚动方式进行获取
+    response=es.search(index=index_name,body=query,scroll='5m',size=1000)#使用滚动方式进行获取
     
     scroll_id=response['_scroll_id']
     results=response['hits']['hits']
@@ -80,7 +80,7 @@ def conduct_query(
         result_list.append(
             {
                 'title':title,
-                'utl':url,
+                'url':url,
                 'content':cleaned_content[:250]
             }
         )
@@ -136,7 +136,7 @@ def conduct_query(
             result_list.append(
                 {
                     'title':title,
-                    'utl':url,
+                    'url':url,
                     'content':cleaned_content[:250]
                 }
             )
@@ -144,12 +144,19 @@ def conduct_query(
     # return query_cnt,query_list,result_list
     return query_cnt,query_list,result_list
 
+def word_proc(query_word):
+    query_word_term=list(set(query_word.split('^')))
+    query_word_term=[s for s in query_word_term if s.strip()]
+    if query_word=='^':
+        query_word_term=[]
+    return query_word_term
+    
 if __name__=="__main__":
     query_word_term=['程明明']
     query_word_phrase=[]
     query_word_regex=[]
-    query_domain='weekly.nankai.edu.cn'
-    frequent_token=['华为']
+    query_domain=''
+    frequent_token=['']
     
     es = Elasticsearch(
         hosts=["http://localhost:9200"],
@@ -160,9 +167,9 @@ if __name__=="__main__":
     query_word_phrase=query_word_phrase,query_word_regex=query_word_regex,query_domain=query_domain,frequent_token=['华为'],
     es=es,index_name=index_name,fields=['title','anchor','content','url'],query_size=5)
     
-    recommend_cnt,recommend_list,recommend_res=conduct_query(query_word_term=query_word_term,
-    query_word_phrase=query_word_phrase+query_word_term,query_word_regex=query_word_regex,query_domain=query_domain,frequent_token=['华为'],
-    es=es,index_name=index_name,fields=['title','anchor','content','url'],query_size=5)
+    # recommend_cnt,recommend_list,recommend_res=conduct_query(query_word_term=query_word_term,
+    # query_word_phrase=query_word_phrase+query_word_term,query_word_regex=query_word_regex,query_domain=query_domain,frequent_token=['华为'],
+    # es=es,index_name=index_name,fields=['title','anchor','content','url'],query_size=5)
     
     print(query_cnt)
     print(query_list)

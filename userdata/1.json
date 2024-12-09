@@ -1,5 +1,58 @@
 {
+    "account": "1",
     "password": "1",
-    "history": [],
-    "freq_word": []
+    "history": [
+        {
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 0
+        },
+        {
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 0
+        },
+        {
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 0
+        },
+        {
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
+        }
+    ],
+    "freq_word": [
+        "\u7a0b\u660e\u660e"
+    ]
 }
