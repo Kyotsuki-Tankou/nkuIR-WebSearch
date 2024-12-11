@@ -1,6 +1,7 @@
 import os
 import json
 import logging
+from baidusearch.baidusearch import search
 from elasticsearch import Elasticsearch
 from flask import Flask,request,jsonify,send_from_directory
 from flask_cors import CORS
@@ -87,7 +88,7 @@ def dosearch():
         global have_login
         global userdata
         if have_login==False:
-            return jsonify({"success": False, "message": "请先登陆"}), 400
+            return jsonify({"success": False, "message": "请先登陆"}), 401
     # try:
         if request.method=='OPTIONS':
             response=app.make_default_options_response()
@@ -113,7 +114,7 @@ def dosearch():
             query_size=20
         frequent_token=userdata['freq_word']
         #conduct query
-        query_cnt,query_list,result_list=conduct_query(
+        query_cnt,query_list,result_list,used_list=conduct_query(
             query_word_term=query_word_term,
             query_word_phrase=query_word_phrase,
             query_word_regex=query_word_regex,
@@ -122,10 +123,11 @@ def dosearch():
             es=es,
             index_name=index_name,
             fields=['title','anchor','content','url'],
-            query_size=query_size
+            query_size=query_size,
+            used_list=[]
             )
         #conduct recommend based on fuzzy search
-        rec1_cnt,rec1_list,rec1_res=conduct_query(
+        rec1_cnt,rec1_list,rec1_res,_=conduct_query(
             query_word_term=[],
             query_word_phrase=query_word_phrase+query_word_term+query_word_regex,
             query_word_regex=[],
@@ -134,9 +136,14 @@ def dosearch():
             es=es,
             index_name=index_name,
             fields=['title','anchor','content','url'],
-            query_size=10
+            query_size=10,
+            used_list=used_list
             )
         
+        baidu_word=(query_term+' '+query_phrase+' '+query_regex).replace('^',' ')
+        rec2_result=search(baidu_word,num_results=10)
+        rec2_cnt=len(rec2_result)
+        rec2_res=[{'title':res['title'],'content':res['abstract'],'url':res['url']} for res in rec2_result]
         #update history
         history={
             'exact':query_term,
@@ -164,7 +171,7 @@ def dosearch():
         with open(f"./userdata/{userdata['account']}.json","w") as f:
             json.dump(userdata,f,indent=4)
         #generate return json
-        return jsonify({'success':True,'res_list':result_list,'res_cnt':query_cnt,'rec1_list':rec1_res,'rec1_cnt':rec1_cnt,'rec2_list':rec1_res,'rec2_cnt':rec1_cnt}),200
+        return jsonify({'success':True,'res_list':result_list,'res_cnt':query_cnt,'rec1_list':rec1_res,'rec1_cnt':rec1_cnt,'rec2_list':rec2_res,'rec2_cnt':rec2_cnt}),200
     # except:
     #     return jsonify({'success': False,"message":"发生错误"}),400
     
@@ -173,7 +180,8 @@ def get_info():
     global userdata
     global have_login
     if have_login==False:
-        return jsonify({"success": False, "message": "请先登陆"}), 400
+        print("请先登陆")
+        return jsonify({"success": False, "message": "请先登陆"}), 401
     if request.method=='OPTIONS':
         response=app.make_default_options_response()
         response.headers['Access-Control-Allow-Methods']='POST'

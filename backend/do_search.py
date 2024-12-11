@@ -20,13 +20,17 @@ def conduct_query(
     es=None,
     index_name=index_name,
     fields=['title','anchor','content','url'],
-    query_size=5
+    query_size=5,
+    used_list=[]
     ):    
     # print(query_word_phrase+query_word_regex)
+    print(f'frequent_token: {frequent_token}')
     
     query=gen_query(query_word_term=query_word_term,query_word_phrase=query_word_phrase+query_word_regex,
                     fields=fields,frequent_token=frequent_token)
-
+    # print(query)
+    # explain=es.explain(index=index_name,body=query,id='lKFGppMBlHQZ9_c9sXxq')
+    # print(explain)
     response=es.search(index=index_name,body=query,scroll='5m',size=1000)#使用滚动方式进行获取
     
     scroll_id=response['_scroll_id']
@@ -35,6 +39,7 @@ def conduct_query(
     query_cnt=0
     query_list={}
     result_list=[]
+    used_url=[]
     regex_patterns=[re.compile(regex_word) for regex_word in query_word_regex]
     
     for hit in results:
@@ -43,7 +48,9 @@ def conduct_query(
         title=hit['_source']['title']
         content=hit['_source']['content']
         url=hit['_source']['url']
-        
+        # id=hit['_id']
+        # print(f'id:{id}')
+        # print(f"explain:{explain}")
         #去除html标签
         soup=BeautifulSoup(content,features="lxml")
         text_content=soup.get_text()
@@ -54,7 +61,8 @@ def conduct_query(
                 continue
         if (query_domain is not None) and (query_domain not in url):
             continue
-        
+        if url in used_list:
+            continue
         query_cnt+=1
         cleaned_content=' '.join(text_content.split()) #去除所有空字符
         print("-"*50)
@@ -77,6 +85,7 @@ def conduct_query(
                 query_list[token]=count
             print(f"{token}:{count}")
         print("-"*50)
+        used_url.append(url)
         result_list.append(
             {
                 'title':title,
@@ -111,6 +120,8 @@ def conduct_query(
             
             if (query_domain is not None) and (query_domain not in url):
                 continue
+            if url in used_list:
+                continue
             
             query_cnt+=1
             cleaned_content=' '.join(text_content.split()) #去除所有空字符
@@ -140,9 +151,11 @@ def conduct_query(
                     'content':cleaned_content[:250]
                 }
             )
+            used_url.append(url)
                 
     # return query_cnt,query_list,result_list
-    return query_cnt,query_list,result_list
+    return query_cnt,query_list,result_list,used_url
+    # return 0,[],[]
 
 def word_proc(query_word):
     query_word_term=list(set(query_word.split('^')))
@@ -163,13 +176,13 @@ if __name__=="__main__":
         http_auth=('elastic', '123456')
     )
     
-    query_cnt,query_list,result_list=conduct_query(query_word_term=query_word_term,
-    query_word_phrase=query_word_phrase,query_word_regex=query_word_regex,query_domain=query_domain,frequent_token=['华为'],
+    query_cnt,query_list,result_list,used_url=conduct_query(query_word_term=query_word_term,
+    query_word_phrase=query_word_phrase,query_word_regex=query_word_regex,query_domain=query_domain,frequent_token=['CT影像AI筛查助力疫情防控'],
     es=es,index_name=index_name,fields=['title','anchor','content','url'],query_size=5)
     
     # recommend_cnt,recommend_list,recommend_res=conduct_query(query_word_term=query_word_term,
     # query_word_phrase=query_word_phrase+query_word_term,query_word_regex=query_word_regex,query_domain=query_domain,frequent_token=['华为'],
-    # es=es,index_name=index_name,fields=['title','anchor','content','url'],query_size=5)
+    # es=es,index_name=index_name,fields=['title','anchor','content','url'],query_size=5,used_list=used_url)
     
     print(query_cnt)
     print(query_list)

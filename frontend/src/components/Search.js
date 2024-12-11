@@ -49,6 +49,8 @@ const Search = () => {
         },
       });
       const data = await response.json();
+      console.log(data.success,data.message)
+      console.log(data)
       if (data.success) {
         setUserData(data.userdata);
       } else {
