@@ -1,7 +1,7 @@
 ## nkuIR-Websearch
-2213919 Kyotsuki Tankou
-
 Curriculum Project Assignment of Information Retrieve (IR)
+
+2213919 Kyotsuki Tankou
 
 College of Computer Science, Nankai University
 ### Brief
