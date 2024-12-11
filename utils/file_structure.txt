@@ -1,0 +1,101 @@
+.git\
+  COMMIT_EDITMSG
+  config
+  description
+  FETCH_HEAD
+  HEAD
+  hooks\
+  index
+  info\
+  logs\
+  objects\
+  ORIG_HEAD
+  refs\
+.gitignore
+backend\
+  account.py
+  do_search.py
+  main.py
+  query_gen.py
+  static\
+  userdata\
+  __pycache__\
+done\
+  nkxw\
+  ppxw01\
+  ppxw02\
+elasticsearch-8.16.0\
+  bin\
+  config\
+  data\
+  jdk\
+  lib\
+  LICENSE.txt
+  logs\
+  modules\
+  NOTICE.txt
+  plugins\
+  README.asciidoc
+elasticsearch-8.16.0-windows-x86_64.zip
+elasticsearch.lnk
+err.txt
+frontend\
+  .gitignore
+  node_modules\
+  package-lock.json
+  package.json
+  public\
+  README.md
+  search-engine-frontend\
+  src\
+geckodriver-v0.35.0-win64.zip
+geckodriver.exe
+kibana-8.16.1\
+  .i18nrc.json
+  .puppeteerrc
+  bin\
+  config\
+  data\
+  LICENSE.txt
+  logs\
+  node\
+  node_modules\
+  NOTICE.txt
+  package.json
+  packages\
+  plugins\
+  README.txt
+  src\
+  x-pack\
+kibana-8.16.1-windows-x86_64.zip
+pages\
+    “碳”索之路·城市行走进湖北省襄阳市（附视频）_澎湃号·媒体_澎湃新闻-The Paper.html
+    中办、国办重磅印发！_澎湃号·媒体_澎湃新闻-The Paper.html
+    全国1^12 ！_澎湃号·政务_澎湃新闻-The Paper.html
+   2024数据资产管理峰会浦东举办 加快释放数据资产价值_澎湃号·媒体_澎湃新闻-The Paper.html
+   2025全国城市春节联欢晚会新闻发布会在京举行_澎湃号·媒体_澎湃新闻-The Paper.html
+   @职场新人，关于试用期你整明白了吗？_澎湃号·政务_澎湃新闻-The Paper.html
+   CBA常规赛：北京控股胜南京头排苏酒_澎湃号·媒体_澎湃新闻-The Paper.html
+   “走出去”为观山湖区科技创新“赋能”_澎湃号·政务_澎湃新闻-The Paper.html
+   一分钟解锁闽政通_政策补贴补助，掌上申请更简单_澎湃号·政务_澎湃新闻-The Paper.html
+   保时捷，深夜道歉_澎湃号·媒体_澎湃新闻-The Paper.html
+   北京市大力推进中医药传承创新发展成效显著_澎湃号·媒体_澎湃新闻-The Paper.html
+   国家级非遗·陇剧《五女拜寿》11月29日晚在甘肃省陇剧院百姓戏曲剧场上演_澎湃号·政务_澎湃新闻-The Paper.html
+   在“川藏公路‘零’公里起点”四川雅安——古道开新篇 茶香沁人心_澎湃号·政务_澎湃新闻-The Paper.html
+   好鲜啊！_澎湃号·政务_澎湃新闻-The Paper.html
+   应届毕业生看过来，教育部直属事业单位2025年度公开招聘119人_澎湃号·政务_澎湃新闻-The Paper.html
+   推动“两山”转化 政协第三届观山湖区委员会专项协商监督会议召开_澎湃号·政务_澎湃新闻-The Paper.html
+   沈阳市房产局手捧购房新政赴北京“迎且”_澎湃号·媒体_澎湃新闻-The Paper.html
+   浦东检察院举办“检律沟通技能同堂实训”活动_澎湃号·媒体_澎湃新闻-The Paper.html
+   潍坊寿光：“鸡司令”养的“寿光鸡”_澎湃号·媒体_澎湃新闻-The Paper.html
+   王祺扬任海南省委常委、三亚市委书记（附简历）_澎湃号·媒体_澎湃新闻-The Paper.html
+   看过来！教你如何查询机关事业养老保险缴费信息及养老金发放明细_澎湃号·政务_澎湃新闻-The Paper.html
+   矿权推介｜矿业权招拍挂出让公告信息（第七十四期）_澎湃号·媒体_澎湃新闻-The Paper.html
+   秦永康专题调度群众身边不正之风和腐败问题集中整治工作_澎湃号·政务_澎湃新闻-The Paper.html
+   观山湖区三届人大常委会召开第二十六次会议_澎湃号·政务_澎湃新闻-The Paper.html
+   退货率猛增，商家集体关闭运费险，运费险到底应谁来购买？_澎湃号·湃客_澎湃新闻-The Paper.html
+   金华镇：拧紧燃气 “安全阀”，守护群众 “幸福家”_澎湃号·政务_澎湃新闻-The Paper.html
+   雪花纷飞，布尔津县越来越多的人吃上“冬季旅游饭” _澎湃号·湃客_澎湃新闻-The Paper.html
+   青岛市全域联动推进上合示范区高质量发展_澎湃号·媒体_澎湃新闻-The Paper.html
+  #“一城多姿最大庆”里的大庆头场雪_澎湃号·媒体_澎湃新闻-The Paper.html
+  +1+1+1+1+1……_澎湃号·政务_澎湃新闻-The Paper.html

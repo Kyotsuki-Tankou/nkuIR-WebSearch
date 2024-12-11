@@ -151,6 +151,37 @@ const Search = () => {
       </div>
         {results && (
           <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{flex:1,marginRight: '10px'}}>
+            <h3>站内推荐：</h3>
+            {results.rec1_list.length === 0 ? (
+              <p>未检索出对应内容</p>
+            ) : (
+              results.rec1_list.map((item, index) => (
+                <div key={index}>
+                  <a href={item.url} target="_blank" rel="noopener noreferrer">
+                    {item.title}
+                  </a>
+                </div>
+              ))
+            )}
+          </div>
+          <div style={{flex:1,marginRight: '10px'}}>
+            <h3>联网推荐</h3>
+            {results.rec2_list.length === 0 ? (
+              <p>未检索出对应内容</p>
+            ) : (
+              results.rec2_list.map((item, index) => (
+                <div key={index}>
+                  <a href={item.url} target="_blank" rel="noopener noreferrer">
+                    {item.title}
+                  </a>
+                </div>
+              ))
+            )}
+          </div>
+          </div>
+          <div>
             <h3>搜索结果：</h3>
             {results.res_list.length === 0 ? (
               <p>未检索出对应内容</p>
@@ -171,35 +202,7 @@ const Search = () => {
                 </div>);
               })
             )}
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <div>
-                <h3>站内推荐：</h3>
-                {results.rec1_list.length === 0 ? (
-                  <p>未检索出对应内容</p>
-                ) : (
-                  results.rec1_list.map((item, index) => (
-                    <div key={index}>
-                      <a href={item.url} target="_blank" rel="noopener noreferrer">
-                        {item.title}
-                      </a>
-                    </div>
-                  ))
-                )}
-              </div>
-              <div>
-                <h3>联网推荐</h3>
-                {results.rec2_list.length === 0 ? (
-                  <p>未检索出对应内容</p>
-                ) : (
-                  results.rec2_list.map((item, index) => (
-                    <div key={index}>
-                      <a href={item.url} target="_blank" rel="noopener noreferrer">
-                        {item.title}
-                      </a>
-                    </div>
-                  ))
-                )}
-              </div>
+            
             </div>
           </div>
         )}

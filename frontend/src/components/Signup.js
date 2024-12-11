@@ -38,7 +38,7 @@ const Signup = () => {
 
   return (
     <div>
-      <h2>登录</h2>
+      <h2>注册</h2>
       <input
         type="text"
         placeholder="用户名"

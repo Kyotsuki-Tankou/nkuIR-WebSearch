@@ -3,26 +3,78 @@
     "password": "2",
     "history": [
         {
-            "exact": "\u7a0b\u660e\u660e",
+            "exact": "",
             "fuzzy": "",
-            "regex": "",
+            "regex": "\u7a0b\u660e+^AA*I",
             "domain": "",
-            "size": 0
+            "size": 20
         },
         {
-            "exact": "\u7a0b\u660e\u660e",
+            "exact": "",
             "fuzzy": "",
-            "regex": "",
+            "regex": "AA*I",
             "domain": "",
-            "size": 0
+            "size": 20
         },
         {
-            "exact": "\u7a0b\u660e\u660e",
+            "exact": "",
+            "fuzzy": "",
+            "regex": "\u7a0b\u660e+^AA+I",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "",
+            "fuzzy": "",
+            "regex": "\u7a0b\u660e+^A+I",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "\u4eba\u5de5\u667a\u80fd",
             "fuzzy": "",
             "regex": "",
             "domain": "",
-            "size": 0
+            "size": 20
+        },
+        {
+            "exact": "\u4eba\u5de5\u667a\u80fd",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "https://www.thepaper.cn",
+            "size": 20
+        },
+        {
+            "exact": "\u5357\u529e\u53d1",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "AI^CT",
+            "fuzzy": "\u5357\u5f00\u5927\u5b66\u8ba1\u7b97\u673a\u5b66\u9662",
+            "regex": "\u7a0b\u660e+",
+            "domain": "nankai",
+            "size": 20
+        },
+        {
+            "exact": "\u5218\u5065",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
         }
     ],
-    "freq_word": []
+    "freq_word": [
+        "\u667a\u80fd",
+        "CT",
+        "\u5f71\u50cf",
+        "AI",
+        "\u5357\u5f00\u5927\u5b66",
+        "\u5357\u5f00",
+        "\u5218\u5065",
+        "\u5927\u5b66",
+        "\u6280\u672f"
+    ]
 }

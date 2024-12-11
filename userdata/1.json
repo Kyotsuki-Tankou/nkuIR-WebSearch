@@ -10,27 +10,6 @@
             "size": 20
         },
         {
-            "exact": "\u7a0b\u660e\u660e",
-            "fuzzy": "",
-            "regex": "",
-            "domain": "",
-            "size": 20
-        },
-        {
-            "exact": "CT\u5f71\u50cf",
-            "fuzzy": "",
-            "regex": "",
-            "domain": "",
-            "size": 20
-        },
-        {
-            "exact": "\u7a0b\u660e\u660e",
-            "fuzzy": "",
-            "regex": "",
-            "domain": "",
-            "size": 20
-        },
-        {
             "exact": "\u534e\u4e3a",
             "fuzzy": "",
             "regex": "",
@@ -38,8 +17,8 @@
             "size": 20
         },
         {
-            "exact": "",
-            "fuzzy": "\u534e\u4e3a",
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "",
             "regex": "",
             "domain": "",
             "size": 20
@@ -52,7 +31,7 @@
             "size": 20
         },
         {
-            "exact": "\u534e\u4e3a",
+            "exact": "\u7a0b\u660e\u660e",
             "fuzzy": "",
             "regex": "",
             "domain": "",
@@ -67,8 +46,6 @@
         }
     ],
     "freq_word": [
-        "\u7a0b",
-        "\u660e\u660e",
         "\u7a0b\u660e\u660e",
         "\u534e\u4e3a"
     ]
