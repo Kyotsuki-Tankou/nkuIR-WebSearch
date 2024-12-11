@@ -1,0 +1,63 @@
+{
+    "account": "3",
+    "password": "3",
+    "history": [
+        {
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "\u534e\u4e3a",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "\u5f00\u6e90",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "\u6069\u60c5",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "\u6069\u60c5",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "nankai",
+            "size": 20
+        },
+        {
+            "exact": "\u6069\u60c5",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "paper",
+            "size": 20
+        }
+    ],
+    "freq_word": [
+        "\u7a0b\u660e\u660e",
+        "\u5f00\u6e90",
+        "\u534e\u4e3a",
+        "\u660e\u660e",
+        "\u7a0b",
+        "\u6069\u60c5"
+    ]
+}
