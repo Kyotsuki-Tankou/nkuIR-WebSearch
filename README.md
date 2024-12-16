@@ -21,3 +21,6 @@ npm start
 
 ### Usage
 nkuIR-Websearch provides exact search, fuzzy search, regex search and domain-filtered search. Moreover, persionalized search sort and personalized recommendation(both offline and online) are integrated as well.
+
+### Others
+For the complete edition, view on [OneDrive](https://5p6r2k-my.sharepoint.com/:f:/g/personal/kyotsuki_tankou_5p6r2k_onmicrosoft_com/EtM5csZMJlNNth_zdWH_hAQBUXy3d6O6aIFydfsx01_YQw?e=HB6j1w)
