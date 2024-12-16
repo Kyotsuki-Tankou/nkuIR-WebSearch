@@ -43,10 +43,32 @@
             "regex": "",
             "domain": "",
             "size": 20
+        },
+        {
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "\u5357\u529e\u53d1",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
         }
     ],
     "freq_word": [
         "\u7a0b\u660e\u660e",
-        "\u534e\u4e3a"
+        "\u534e\u4e3a",
+        "\u5357\u529e\u53d1"
     ]
 }

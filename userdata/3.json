@@ -1,0 +1,59 @@
+{
+    "account": "3",
+    "password": "3",
+    "history": [
+        {
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "\u534e\u4e3a",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "",
+            "regex": "",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "",
+            "fuzzy": "",
+            "regex": "\u7a0b\u660e+",
+            "domain": "",
+            "size": 20
+        },
+        {
+            "exact": "",
+            "fuzzy": "\u4eba\u5de5\u667a\u80fd\u6280\u672f",
+            "regex": "",
+            "domain": "paper",
+            "size": 20
+        },
+        {
+            "exact": "\u7a0b\u660e\u660e",
+            "fuzzy": "\u5357\u5f00\u5927\u5b66\u8ba1\u7b97\u673a\u5b66\u9662",
+            "regex": "A+I",
+            "domain": "nankai",
+            "size": 20
+        }
+    ],
+    "freq_word": [
+        "\u4eba\u5de5\u667a\u80fd\u6280\u672f",
+        "\u6280\u672f",
+        "\u534e\u4e3a",
+        "\u667a\u80fd",
+        "\u5357\u5f00\u5927\u5b66",
+        "\u4eba\u5de5\u667a\u80fd",
+        "\u5357\u5f00",
+        "\u8ba1\u7b97\u673a",
+        "\u5b66\u9662"
+    ]
+}
