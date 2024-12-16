@@ -56,7 +56,7 @@
 
 代码仓库：[Github链接](https://github.com/Kyotsuki-Tankou/nkuIR-WebSearch)
 
-完整版内容（包含网页条目）：[链接](https://5p6r2k-my.sharepoint.com/:f:/g/personal/kyotsuki_tankou_5p6r2k_onmicrosoft_com/EtM5csZMJlNNth_zdWH_hAQBUXy3d6O6aIFydfsx01_YQw?e=HB6j1w)
+完整版内容（包含网页条目和未压缩版本的视频）：[链接](https://5p6r2k-my.sharepoint.com/:f:/g/personal/kyotsuki_tankou_5p6r2k_onmicrosoft_com/EtM5csZMJlNNth_zdWH_hAQBUXy3d6O6aIFydfsx01_YQw?e=HB6j1w)
 
 ***
 
